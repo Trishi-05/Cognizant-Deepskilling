@@ -7,7 +7,7 @@ import jakarta.persistence.Table;
 @Table(name="country")
 public class Country {
 	@Id
-	@Column(name="code")
+	@Column(name="co_code")
 	private String code;
 	
 	public String getCode() {
@@ -26,7 +26,7 @@ public class Country {
 		this.name = name;
 	}
 
-	@Column(name="name")
+	@Column(name="co_name")
 	private String name;
 
 	@Override
