@@ -1,40 +1,65 @@
 package com.cognizant.ormlearn;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.List;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
 import com.cognizant.ormlearn.model.Country;
 import com.cognizant.ormlearn.service.CountryService;
-
+import com.cognizant.ormlearn.service.exception.CountryNotFoundException;
 
 @SpringBootApplication
 public class OrmLearnApplication {
-	private static final Logger LOGGER =
-	        LoggerFactory.getLogger(OrmLearnApplication.class);
-	private static CountryService countryService;
-	private static void testGetAllCountries() {
 
-	    LOGGER.info("Start");
+    private static final Logger LOGGER
+            = LoggerFactory.getLogger(OrmLearnApplication.class);
+    private static CountryService countryService;
 
-	    List<Country> countries = countryService.getAllCountries();
+    private static void testGetAllCountries() {
 
-	    LOGGER.debug("countries={}", countries);
+        LOGGER.info("Start");
 
-	    LOGGER.info("End");
-	}
-	public static void main(String[] args) {
-		ApplicationContext context =
-		        SpringApplication.run(OrmLearnApplication.class, args);
+        List<Country> countries = countryService.getAllCountries();
 
-		countryService = context.getBean(CountryService.class);
+        LOGGER.debug("countries={}", countries);
 
-		LOGGER.info("Inside main");
+        LOGGER.info("End");
+    }
 
-		testGetAllCountries();
-	}
+    private static void testFindCountryByCode() {
+
+        LOGGER.info("Start");
+
+        try {
+
+            Country country = countryService.findCountryByCode("IN");
+
+            LOGGER.debug("Country={}", country);
+
+        } catch (CountryNotFoundException e) {
+
+            LOGGER.error(e.getMessage());
+
+        }
+
+        LOGGER.info("End");
+    }
+
+    public static void main(String[] args) {
+
+        ApplicationContext context
+                = SpringApplication.run(OrmLearnApplication.class, args);
+
+        countryService = context.getBean(CountryService.class);
+
+        LOGGER.info("Inside main");
+
+        testGetAllCountries();
+        testFindCountryByCode();
+    }
 
 }
